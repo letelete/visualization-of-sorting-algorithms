@@ -207,9 +207,14 @@ void Widget::sortButtonStatus(int state)
 
 void Widget::on_comparision(int n, int k)
 {
-    columns[n]->setX(columns[n]->pos().x() + columnsWidth);
-    columns[k]->setX(columns[k]->pos().x() - columnsWidth);
+    auto nRect = columns[n]->rect();
+    auto kRect = columns[k]->rect();
+    auto nColumnPos = nRect.left();
+    nRect.moveLeft(kRect.left());
+    kRect.moveLeft(nColumnPos);
 
+    columns[n]->setRect(nRect);
+    columns[k]->setRect(kRect);
     std::swap(columns[n], columns[k]);
 
     comparisions++;
