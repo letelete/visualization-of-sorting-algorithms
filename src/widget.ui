@@ -292,6 +292,9 @@ background-color:rgb(31, 31, 31)</string>
             <property name="styleSheet">
              <string notr="true"/>
             </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
             <property name="minimum">
              <number>50</number>
             </property>
@@ -413,6 +416,11 @@ font: 87 14pt &quot;Roboto Light&quot;;</string>
            </property>
            <property name="textAlignment">
             <set>AlignLeading|AlignVCenter</set>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Gnome Sort</string>
            </property>
           </item>
          </widget>

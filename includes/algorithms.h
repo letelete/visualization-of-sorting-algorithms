@@ -31,6 +31,7 @@ private:
     //sorting algorithms declaration
     void BubbleSort();
     void CocktailSort();
+    void GnomeSort();
 };
 
 #endif // THREAD_H

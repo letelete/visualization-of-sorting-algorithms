@@ -210,11 +210,14 @@ void Widget::on_comparision(int n, int k)
     auto nRect = columns[n]->rect();
     auto kRect = columns[k]->rect();
     auto nColumnPos = nRect.left();
-    nRect.moveLeft(kRect.left());
+    auto kColumnPos = kRect.left();
+
+    nRect.moveLeft(kColumnPos);
     kRect.moveLeft(nColumnPos);
 
     columns[n]->setRect(nRect);
     columns[k]->setRect(kRect);
+
     std::swap(columns[n], columns[k]);
 
     comparisions++;

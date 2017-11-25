@@ -19,6 +19,9 @@ void Thread::run()
         case 1:
             CocktailSort();
             break;
+        case 2:
+            GnomeSort();
+            break;
     }
 }
 
@@ -65,7 +68,7 @@ void Thread::CocktailSort()
     while (swapped)
     {
         swapped = false;
-        for (int i = start; i < end; ++i)
+        for (int i=start; i<end; i++)
         {
             if (columnsHeight[i] > columnsHeight[i + 1])
             {
@@ -73,8 +76,8 @@ void Thread::CocktailSort()
                 emit comparision(i, i+1);
                 swapped = true;
             }
-            emit arrayAccess(arrayAccessVariable);
             arrayAccessVariable++;
+            emit arrayAccess(arrayAccessVariable);
 
             msleep(sortDelay);
         }
@@ -83,22 +86,47 @@ void Thread::CocktailSort()
             break;
 
         swapped = false;
-        --end;
+        end++;
 
-        for (int i = end - 1; i >= start; --i)
+        for(int i=end-1; i>=start; i--)
         {
-            if (columnsHeight[i] > columnsHeight[i + 1])
+            if(columnsHeight[i] > columnsHeight[i + 1])
             {
                 std::swap(columnsHeight[i], columnsHeight[i+1]);
                 emit comparision(i, i+1);
                 swapped = true;
             }
-            emit arrayAccess(arrayAccessVariable);
             arrayAccessVariable++;
+            emit arrayAccess(arrayAccessVariable);
 
             msleep(sortDelay);
         }
-        ++start;
+        start++;
+    }
+    Sorted();
+}
+//--------- GNOME SORT ---------
+
+void Thread::GnomeSort()
+{
+    int index = 0;
+
+    while (index < amount)
+    {
+        if (index == 0)
+            index++;
+        if (columnsHeight[index] >= columnsHeight[index-1])
+            index++;
+        else
+        {
+            std::swap(columnsHeight[index], columnsHeight[index-1]);
+            emit comparision(index, index-1);
+            index--;
+
+            msleep(sortDelay);
+        }
+        arrayAccessVariable++;
+        emit arrayAccess(arrayAccessVariable);
     }
     Sorted();
 }
