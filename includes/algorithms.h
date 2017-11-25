@@ -21,17 +21,23 @@ protected:
 
 private:
     std::vector<float> columnsHeight;
+    int sortDoneDelay;
     int sortDelay;
     int amount;
     int sortWith;
     int arrayAccessVariable;
 
+    void swap(int, int);
+    void isAccessToArray();
     void Sorted();
 
     //sorting algorithms declaration
     void BubbleSort();
     void CocktailSort();
     void GnomeSort();
+
+    int QuickSortPartition(int, int);
+    void QuickSort(int, int);
 };
 
 #endif // THREAD_H

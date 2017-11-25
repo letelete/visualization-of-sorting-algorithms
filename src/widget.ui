@@ -423,6 +423,11 @@ font: 87 14pt &quot;Roboto Light&quot;;</string>
             <string>Gnome Sort</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Quick Sort</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item>

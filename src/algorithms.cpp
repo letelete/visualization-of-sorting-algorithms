@@ -2,27 +2,25 @@
 
 Thread::Thread(int ms, int alg, int n, std::vector<float> col, QObject *parent = nullptr) : QThread(parent)
 {
-    sortDelay = ms;
     sortWith = alg;
     amount = n;
     columnsHeight = col;
     arrayAccessVariable = 0;
+
+    sortDoneDelay = (amount >= 300 ? 2 : 5);
+    sortDelay = ms;
 }
 
 void Thread::run()
 {
     switch(sortWith)
     {
-        case 0:
-            BubbleSort();
-            break;
-        case 1:
-            CocktailSort();
-            break;
-        case 2:
-            GnomeSort();
-            break;
+        case 0: BubbleSort(); break;
+        case 1: CocktailSort(); break;
+        case 2: GnomeSort(); break;
+        case 3: QuickSort(0, amount -1); break;
     }
+    Sorted();
 }
 
 void Thread::Sorted()
@@ -30,31 +28,36 @@ void Thread::Sorted()
     for(auto i=0; i<amount; i++)
     {
         emit sortDone(i);
-        msleep(5);
+        msleep(sortDoneDelay);
     }
     emit changeButtonStatus(2);
 }
 
-//---------- BUBBLE SORT ----------
+void Thread::swap(int n, int k)
+{
+    std::swap(columnsHeight[n], columnsHeight[k]);
+    emit comparision(n, k);
+}
+
+void Thread::isAccessToArray()
+{
+    arrayAccessVariable++;
+    emit arrayAccess(arrayAccessVariable);
+}
+
+//--------- BUBBLE SORT -----------
 
 void Thread::BubbleSort()
 {
-    for(auto i=0; i<amount; i++)
-        {
-            for(auto j=0; j<amount-1; j++)
+    for(auto i = 0; i < amount; i++)
+            for(auto j = 0; j< amount-1; j++)
             {
                 if(columnsHeight[j] > columnsHeight[j+1])
-                {
-                    std::swap(columnsHeight[j], columnsHeight[j+1]);
-                    emit comparision(j, j+1);
-                }
-                emit arrayAccess(arrayAccessVariable);
-                arrayAccessVariable++;
+                    swap(j, j+1);
 
+                isAccessToArray();
                 msleep(sortDelay);
             }
-    }
-    Sorted();
 }
 
 //--------- COCKTAIL SORT ---------
@@ -62,23 +65,20 @@ void Thread::BubbleSort()
 void Thread::CocktailSort()
 {
     bool swapped = true;
-    int start = 0;
-    int end = amount-1;
+    auto start = 0;
+    auto end = amount-1;
 
-    while (swapped)
+    while(swapped)
     {
         swapped = false;
-        for (int i = start; i < end; ++i)
+        for (auto i = start; i < end; ++i)
         {
-            if (columnsHeight[i] > columnsHeight[i + 1])
+            if(columnsHeight[i] > columnsHeight[i + 1])
             {
-                std::swap(columnsHeight[i], columnsHeight[i+1]);
-                emit comparision(i, i+1);
+                swap(i, i+1);
                 swapped = true;
             }
-            emit arrayAccess(arrayAccessVariable);
-            arrayAccessVariable++;
-
+            isAccessToArray();
             msleep(sortDelay);
         }
 
@@ -88,25 +88,21 @@ void Thread::CocktailSort()
         swapped = false;
         --end;
 
-        for (int i = end - 1; i >= start; --i)
+        for (auto i = end-1; i >= start; --i)
         {
             if (columnsHeight[i] > columnsHeight[i + 1])
             {
-                std::swap(columnsHeight[i], columnsHeight[i+1]);
-                emit comparision(i, i+1);
+                swap(i, i+1);
                 swapped = true;
             }
-            emit arrayAccess(arrayAccessVariable);
-            arrayAccessVariable++;
-
+            isAccessToArray();
             msleep(sortDelay);
         }
         ++start;
     }
-    Sorted();
 }
 
-//--------- GNOME SORT ---------
+//--------- GNOME SORT ------------
 
 void Thread::GnomeSort()
 {
@@ -120,14 +116,46 @@ void Thread::GnomeSort()
             index++;
         else
         {
-            std::swap(columnsHeight[index], columnsHeight[index-1]);
-            emit comparision(index, index-1);
+            swap(index, index-1);
             index--;
-
-            msleep(sortDelay);
         }
-        arrayAccessVariable++;
-        emit arrayAccess(arrayAccessVariable);
+        isAccessToArray();
+        msleep(sortDelay);
     }
-    Sorted();
+}
+
+//--------- QUICK SORT ------------
+
+int Thread::QuickSortPartition(int arrayBegin, int arrayEnd)
+{
+    auto pivot = columnsHeight[arrayEnd];
+    auto i = (arrayBegin - 1);
+
+    for (auto j = arrayBegin; j <= arrayEnd - 1; j++)
+    {
+        if (columnsHeight[j] <= pivot)
+        {
+            i++;
+            swap(i, j);
+        }
+
+        isAccessToArray();
+        msleep(sortDelay);
+    }
+
+    swap(i+1, arrayEnd);
+
+    msleep(sortDelay);
+    return(i + 1);
+}
+
+void Thread::QuickSort(int arrayBegin, int arrayEnd)
+{
+    if (arrayBegin < arrayEnd)
+    {
+        auto pi = QuickSortPartition(arrayBegin, arrayEnd);
+
+        QuickSort(arrayBegin, pi - 1);
+        QuickSort(pi + 1, arrayEnd);
+    }
 }

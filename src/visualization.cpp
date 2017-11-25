@@ -32,7 +32,7 @@ Widget::Widget(QWidget *parent) :
     columnsSetUp(1, 100);
 
     //customize the ListWidget & set a QMap for sorting algorithms
-    for(int i=0; i<ui->algorithmSelection->count(); i++)
+    for(int i = 0; i < ui->algorithmSelection->count(); i++)
     {
       QListWidgetItem *item = ui->algorithmSelection->item(i);
       item->setSizeHint(QSize(item->sizeHint().width(), 50));
@@ -139,8 +139,7 @@ void Widget::on_delayChanger_valueChanged(int ms)
 
 
 void Widget::on_sortButton_clicked()
-{   
-
+{
     switch(appStates)
     {
         case 0:
@@ -166,7 +165,6 @@ void Widget::on_sortButton_clicked()
 
         default:
             break;
-
     }
 }
 
