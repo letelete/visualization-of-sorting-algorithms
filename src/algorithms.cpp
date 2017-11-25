@@ -68,7 +68,7 @@ void Thread::CocktailSort()
     while (swapped)
     {
         swapped = false;
-        for (int i=start; i<end; i++)
+        for (int i = start; i < end; ++i)
         {
             if (columnsHeight[i] > columnsHeight[i + 1])
             {
@@ -76,8 +76,8 @@ void Thread::CocktailSort()
                 emit comparision(i, i+1);
                 swapped = true;
             }
-            arrayAccessVariable++;
             emit arrayAccess(arrayAccessVariable);
+            arrayAccessVariable++;
 
             msleep(sortDelay);
         }
@@ -86,25 +86,26 @@ void Thread::CocktailSort()
             break;
 
         swapped = false;
-        end++;
+        --end;
 
-        for(int i=end-1; i>=start; i--)
+        for (int i = end - 1; i >= start; --i)
         {
-            if(columnsHeight[i] > columnsHeight[i + 1])
+            if (columnsHeight[i] > columnsHeight[i + 1])
             {
                 std::swap(columnsHeight[i], columnsHeight[i+1]);
                 emit comparision(i, i+1);
                 swapped = true;
             }
-            arrayAccessVariable++;
             emit arrayAccess(arrayAccessVariable);
+            arrayAccessVariable++;
 
             msleep(sortDelay);
         }
-        start++;
+        ++start;
     }
     Sorted();
 }
+
 //--------- GNOME SORT ---------
 
 void Thread::GnomeSort()
