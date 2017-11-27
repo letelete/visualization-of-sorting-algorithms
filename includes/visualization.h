@@ -41,17 +41,18 @@ private:
     void threadUpdate(int, int);
 
     std::vector<QGraphicsRectItem*> columns;
-    std::vector<float> columnsHeight;
+    std::vector<double> columnsHeight;
 
     QMap<int, QString> AlgorithmList;
 
     //delay of sorting in ms
     int sortDelay;
 
-    unsigned amountOfColumns;
-    float columnsWidth;
-    int sceneHeight;
-    int sceneWidth;
+    double columnsWidth;
+    double sceneHeight;
+    double sceneWidth;
+
+    int amountOfColumns;
     int comparisions;
 
     //key which is use to establish the algorithm to sort columns

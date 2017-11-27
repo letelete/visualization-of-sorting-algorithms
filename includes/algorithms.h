@@ -8,7 +8,7 @@ class Thread : public QThread
 {
     Q_OBJECT
 public:
-    Thread(int, int, int, std::vector<float>, QObject*);
+    Thread(int, int, int, std::vector<double>, QObject*);
 
 signals:
     void comparision(int, int);
@@ -20,7 +20,7 @@ protected:
     void run() override;
 
 private:
-    std::vector<float> columnsHeight;
+    std::vector<double> columnsHeight;
     int sortDoneDelay;
     int sortDelay;
     int amount;
@@ -33,11 +33,15 @@ private:
 
     //sorting algorithms declaration
     void BubbleSort();
+    void RecursiveBubbleSort(int);
     void CocktailSort();
     void GnomeSort();
 
     int QuickSortPartition(int, int);
     void QuickSort(int, int);
+
+    void Heapify(int n, int i);
+    void HeapSort();
 };
 
 #endif // THREAD_H

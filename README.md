@@ -1,6 +1,3 @@
 # Visualization_Of_Sorting_Algorithms
 
-![](https://i.imgur.com/6mBCBZf.gif)
-![](https://i.imgur.com/31QpgcV.gif)
-![](https://i.imgur.com/JZYOmA9.gif)
-![](https://i.imgur.com/Xol7xGv.gif)
+[![App preview](https://i.imgur.com/1eg1kuU.png)](https://www.youtube.com/watch?v=ClpMRMi8ikQ&feature)

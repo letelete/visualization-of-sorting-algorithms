@@ -1,6 +1,6 @@
 #include "includes/algorithms.h"
 
-Thread::Thread(int ms, int alg, int n, std::vector<float> col, QObject *parent = nullptr) : QThread(parent)
+Thread::Thread(int ms, int alg, int n, std::vector<double> col, QObject *parent = nullptr) : QThread(parent)
 {
     sortWith = alg;
     amount = n;
@@ -16,9 +16,11 @@ void Thread::run()
     switch(sortWith)
     {
         case 0: BubbleSort(); break;
-        case 1: CocktailSort(); break;
-        case 2: GnomeSort(); break;
-        case 3: QuickSort(0, amount -1); break;
+        case 1: RecursiveBubbleSort(amount); break;
+        case 2: CocktailSort(); break;
+        case 3: GnomeSort(); break;
+        case 4: QuickSort(0, amount -1); break;
+        case 5: HeapSort(); break;
     }
     Sorted();
 }
@@ -60,6 +62,24 @@ void Thread::BubbleSort()
             }
 }
 
+//--------- RECURSIVE BUBBLE SORT -
+
+void Thread::RecursiveBubbleSort(int n)
+{
+    if (n == 1)
+        return;
+
+    for (int i=0; i<n-1; i++)
+    {
+        if (columnsHeight[i] > columnsHeight[i+1])
+            swap(i, i+1);
+
+        isAccessToArray();
+        msleep(sortDelay);
+    }
+    RecursiveBubbleSort(n-1);
+}
+
 //--------- COCKTAIL SORT ---------
 
 void Thread::CocktailSort()
@@ -71,7 +91,7 @@ void Thread::CocktailSort()
     while(swapped)
     {
         swapped = false;
-        for (auto i = start; i < end; ++i)
+        for (auto i = start; i < end; i++)
         {
             if(columnsHeight[i] > columnsHeight[i + 1])
             {
@@ -86,9 +106,9 @@ void Thread::CocktailSort()
             break;
 
         swapped = false;
-        --end;
+        end--;
 
-        for (auto i = end-1; i >= start; --i)
+        for (auto i = end-1; i >= start; i--)
         {
             if (columnsHeight[i] > columnsHeight[i + 1])
             {
@@ -98,7 +118,7 @@ void Thread::CocktailSort()
             isAccessToArray();
             msleep(sortDelay);
         }
-        ++start;
+        start++;
     }
 }
 
@@ -157,5 +177,49 @@ void Thread::QuickSort(int arrayBegin, int arrayEnd)
 
         QuickSort(arrayBegin, pi - 1);
         QuickSort(pi + 1, arrayEnd);
+    }
+}
+
+//--------- HEAP SORT -------------
+
+void Thread::Heapify(int n, int i)
+{
+    int largest = i;
+    int l = 2*i + 1;
+    int r = 2*i + 2;
+
+    if (l < n && columnsHeight[l] > columnsHeight[largest])
+        largest = l;
+
+    isAccessToArray();
+
+    if (r < n && columnsHeight[r] > columnsHeight[largest])
+        largest = r;
+
+    isAccessToArray();
+
+    if (largest != i)
+    {
+        swap(i, largest);
+        Heapify(n, largest);
+
+        msleep(sortDelay);
+    }
+}
+
+void Thread::HeapSort()
+{
+    auto n = amount;
+
+    for (int i = n / 2 - 1; i >= 0; i--)
+    {
+        Heapify(n, i);
+    }
+
+    for (int i=n-1; i>=0; i--)
+    {
+        swap(0, i);
+        msleep(sortDelay);
+        Heapify(i, 0);
     }
 }

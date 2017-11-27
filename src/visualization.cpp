@@ -17,19 +17,11 @@ Widget::Widget(QWidget *parent) :
     ui->cellsToSortBackground->horizontalScrollBar()->blockSignals(true);
 
     //configuring variables
-    appStates = -1;
+    appStates = -1; // (-1) - App started
 
     sceneHeight = ui->cellsToSortBackground->size().height();
     sceneWidth = ui->cellsToSortBackground->size().width();
     comparisions = 0;
-
-    //to improve UX
-    ui->amountChanger->setDisabled(true);
-    ui->delayChanger->setDisabled(true);
-    ui->sortButton->setDisabled(true);
-
-    //creating 100 columns with sorting delay == 1ms , setting them up
-    columnsSetUp(1, 100);
 
     //customize the ListWidget & set a QMap for sorting algorithms
     for(int i = 0; i < ui->algorithmSelection->count(); i++)
@@ -38,6 +30,14 @@ Widget::Widget(QWidget *parent) :
       item->setSizeHint(QSize(item->sizeHint().width(), 50));
       AlgorithmList.insert(i, item->text());
     }
+
+    //to improve UX
+    ui->amountChanger->setDisabled(true);
+    ui->delayChanger->setDisabled(true);
+    ui->sortButton->setDisabled(true);
+
+    //creating 100 columns with sorting delay == 1ms , setting them up
+    columnsSetUp(1, 100);
 }
 
 void Widget::columnsSetUp(int ms, int n)
@@ -45,16 +45,17 @@ void Widget::columnsSetUp(int ms, int n)
     //configuring variables
     ui->LabelComparisions_var->setNum(0);
     ui->LabelArrayAccesses_var->setNum(0);
+
     sortDelay = ms;
-    amountOfColumns = static_cast<unsigned>(n);
-    columnsWidth = static_cast<float>(sceneWidth) / static_cast<float>(amountOfColumns);
+    amountOfColumns = n;
+    columnsWidth = sceneWidth / amountOfColumns;
 
     //setting up columns to sort
-    columns.resize(amountOfColumns);
+    columns.resize(static_cast<unsigned>(amountOfColumns));
 
     //setting up columns height
-    float incrementBy = static_cast<float>(sceneHeight) / static_cast<float>(amountOfColumns);
-    for(auto i=incrementBy; i<=sceneHeight; i+=incrementBy)
+    double incrementBy = sceneHeight / amountOfColumns;
+    for(auto i = incrementBy; i <= sceneHeight; i += incrementBy)
         columnsHeight.push_back(i);
 
     //randomize an array
@@ -64,7 +65,7 @@ void Widget::columnsSetUp(int ms, int n)
 
     //aplying columns to scene
     auto j = 0;
-    double k = 0.0;
+    auto k = 0.0;
     for(auto &p : columns)
     {
         p = new QGraphicsRectItem;
@@ -81,7 +82,7 @@ void Widget::columnsSetUp(int ms, int n)
         scene->addItem(p);
 
         j++;
-        k += static_cast<double>(columnsWidth);
+        k += columnsWidth;
     }
 }
 
