@@ -1,6 +1,6 @@
 # 📊 Visualization of sorting algorithms
 
-<p align="center"><img src="./preview/gif/4.gif" /></p>
+<p align="left"><img src="./preview/gif/4.gif" /></p>
 
 ## 🚩 Table of Contents
 - [About](#-about)
