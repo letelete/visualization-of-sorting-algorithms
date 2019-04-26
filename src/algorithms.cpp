@@ -52,7 +52,8 @@ void Thread::isAccessToArray()
 void Thread::BubbleSort()
 {
     for(auto i = 0; i < amount; i++)
-            for(auto j = 0; j< amount-1; j++)
+//            for(auto j = 0; j< amount-1; j++)
+        for(auto j = 0; j< amount-i-1; j++) //FIXME-LYS algorithmic error,leads to more waste
             {
                 if(columnsHeight[j] > columnsHeight[j+1])
                     swap(j, j+1);
